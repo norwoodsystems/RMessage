@@ -3,8 +3,8 @@
         "backgroundColor": "#00C060",
         "backgroundColorAlpha": 1.0,
         "titleTextColor": "#FFFFFF",
-        "titleFontSize": 14,
-        "subTitleFontSize": 12,
+        "titleFontSize": 17,
+        "subTitleFontSize": 14,
         "subTitleTextColor": "#FFFFFF",
         "iconImage": "NotificationBackgroundSuccessIcon.png",
         "blurBackground": 0
@@ -13,8 +13,8 @@
         "backgroundColor": "#E8E8E8",
         "backgroundColorAlpha": 1.0,
         "titleTextColor": "#727C83",
-        "titleFontSize": 14,
-        "subTitleFontSize": 12,
+        "titleFontSize": 17,
+        "subTitleFontSize": 14,
         "subTitleTextColor": "#727C83",
         "blurBackground": 0
     },
@@ -22,8 +22,8 @@
         "backgroundColor": "#FFCC00",
         "backgroundColorAlpha": 1.0,
         "titleTextColor": "#484638",
-        "titleFontSize": 14,
-        "subTitleFontSize": 12,
+        "titleFontSize": 17,
+        "subTitleFontSize": 14,
         "subTitleTextColor": "#484638",
         "iconImage": "NotificationBackgroundWarningIcon.png",
         "blurBackground": 0
@@ -32,8 +32,8 @@
         "backgroundColor": "#FF2D55",
         "backgroundColorAlpha": 1.0,
         "titleTextColor": "#FFFFFF",
-        "titleFontSize": 14,
-        "subTitleFontSize": 12,
+        "titleFontSize": 17,
+        "subTitleFontSize": 14,
         "subTitleTextColor": "#FFFFFF",
         "iconImage": "NotificationBackgroundErrorIcon.png",
         "blurBackground": 0
