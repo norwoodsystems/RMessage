@@ -14,8 +14,8 @@ static NSString *const RDesignFileName = @"RMessageDefaultDesign";
 
 /** animation constants */
 static double const kRMessageAnimationDuration = 0.3f;
-static double const kRMessageDisplayTime = 1.5f;
-static double const kRMessageExtraDisplayTimePerPixel = 0.04f;
+static double const kRMessageDisplayTime = 0.75f;
+static double const kRMessageExtraDisplayTimePerPixel = 0.004f;
 
 /** Contains the global design dictionary specified in the entire design RDesignFile */
 static NSMutableDictionary *globalDesignDictionary;
@@ -27,6 +27,7 @@ static NSMutableDictionary *globalDesignDictionary;
 @property (nonatomic, weak) IBOutlet UILabel *subtitleLabel;
 @property (nonatomic, weak) IBOutlet NSLayoutConstraint *titleSubtitleContainerViewTopLayoutConstraint;
 @property (nonatomic, weak) IBOutlet NSLayoutConstraint *titleSubtitleContainerViewCenterYConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *labelSpacing;
 
 @property (nonatomic, strong) UIImageView *iconImageView;
 @property (nonatomic, strong) UIImageView *backgroundImageView;
@@ -221,6 +222,10 @@ static NSMutableDictionary *globalDesignDictionary;
         _delegate = delegate;
         _title = title;
         _subtitle = subtitle;
+        
+        if ( title == nil || subtitle == nil )
+            _labelSpacing.constant = 0;
+        
         _iconImage = iconImage;
         _duration = duration;
         viewController ? _viewController = viewController : (_viewController = [RMessageView defaultViewController]);
@@ -496,7 +501,7 @@ static NSMutableDictionary *globalDesignDictionary;
 - (void)setupDesignDefaults
 {
     self.backgroundColor = nil;
-    self.messageOpacity = 0.97f;
+    self.messageOpacity = 0.98f;
     _shouldBlurBackground = NO;
     _titleLabel.numberOfLines = 0;
     _titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
@@ -632,7 +637,7 @@ static NSMutableDictionary *globalDesignDictionary;
     }
 
     if (subTitleFontName) {
-        _subtitleLabel.font = [UIFont fontWithName:subTitleFontName size:subTitleFontSize];
+        _subtitleLabel.font = [UIFont systemFontOfSize:subTitleFontSize weight:UIFontWeightMedium];
     } else if (subTitleFontSize) {
         _subtitleLabel.font = [UIFont systemFontOfSize:subTitleFontSize];
     }
@@ -649,7 +654,7 @@ static NSMutableDictionary *globalDesignDictionary;
                                                                         toItem:self.titleSubtitleContainerView
                                                                      attribute:NSLayoutAttributeCenterY
                                                                     multiplier:1.f
-                                                                      constant:0.f];
+                                                                      constant:-1.f];
     NSLayoutConstraint *imgViewLeading = [NSLayoutConstraint constraintWithItem:self.iconImageView
                                                                      attribute:NSLayoutAttributeLeading
                                                                      relatedBy:NSLayoutRelationEqual
@@ -663,14 +668,14 @@ static NSMutableDictionary *globalDesignDictionary;
                                                                          toItem:self.titleSubtitleContainerView
                                                                       attribute:NSLayoutAttributeLeading
                                                                      multiplier:1.f
-                                                                       constant:-15.f];
+                                                                       constant:-10.f];
     NSLayoutConstraint *imgViewBottom = [NSLayoutConstraint constraintWithItem:self.iconImageView
                                                                     attribute:NSLayoutAttributeBottom
                                                                     relatedBy:NSLayoutRelationLessThanOrEqual
                                                                        toItem:self
                                                                     attribute:NSLayoutAttributeBottom
                                                                    multiplier:1.f
-                                                                     constant:-10.f];
+                                                                     constant:-7.0f];
     [self addSubview:self.iconImageView];
     [[self class] activateConstraints:@[imgViewCenterY, imgViewLeading, imgViewTrailing, imgViewBottom] inSuperview:self];
 }
@@ -786,23 +791,53 @@ static NSMutableDictionary *globalDesignDictionary;
 - (void)animateMessage
 {
     [self.superview layoutIfNeeded];
-    if (!self.shouldBlurBackground) self.alpha = 0.f;
-    [UIView animateWithDuration:kRMessageAnimationDuration + 0.2f
-                          delay:0.f
-         usingSpringWithDamping:0.7
-          initialSpringVelocity:0.f
-                        options:UIViewAnimationOptionCurveEaseInOut | UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionAllowUserInteraction
-                     animations:^{
-                         if (!self.shouldBlurBackground) self.alpha = self.messageOpacity;
-                         self.topToVCLayoutConstraint.constant = self.topToVCFinalConstant;
-                         [self.superview layoutIfNeeded];
-                     }
-                     completion:^(BOOL finished) {
-                         self.messageIsFullyDisplayed = YES;
-                         if ([self.delegate respondsToSelector:@selector(messageViewDidPresent:)]) {
-                             [self.delegate messageViewDidPresent:self];
-                         }
-                     }];
+    if (!self.shouldBlurBackground)
+        self.alpha = 0.f;
+    
+    if ( self.messageType == RMessageTypeWarning )
+    {
+        self.topToVCLayoutConstraint.constant = self.topToVCFinalConstant;
+        [self.superview layoutIfNeeded];
+        
+        [UIView animateWithDuration:kRMessageAnimationDuration + 0.2f animations:^
+        {
+            if (!self.shouldBlurBackground)
+                self.alpha = self.messageOpacity;
+        }
+        completion:^(BOOL finished)
+        {
+            self.messageIsFullyDisplayed = YES;
+            if ([self.delegate respondsToSelector:@selector(messageViewDidPresent:)])
+            {
+                [self.delegate messageViewDidPresent:self];
+            }
+        }];
+    }
+    else
+    {
+        [UIView animateWithDuration:kRMessageAnimationDuration + 0.2f
+                              delay:0.f
+             usingSpringWithDamping:0.7
+              initialSpringVelocity:0.f
+                            options:UIViewAnimationOptionCurveEaseInOut |
+                                    UIViewAnimationOptionBeginFromCurrentState |
+                                    UIViewAnimationOptionAllowUserInteraction
+                         animations:^
+        {
+             if (!self.shouldBlurBackground)
+                 self.alpha = self.messageOpacity;
+             self.topToVCLayoutConstraint.constant = self.topToVCFinalConstant;
+             [self.superview layoutIfNeeded];
+        }
+        completion:^(BOOL finished)
+        {
+             self.messageIsFullyDisplayed = YES;
+             if ([self.delegate respondsToSelector:@selector(messageViewDidPresent:)])
+             {
+                 [self.delegate messageViewDidPresent:self];
+             }
+        }];
+    }
 }
 
 - (void)dismiss
@@ -817,17 +852,44 @@ static NSMutableDictionary *globalDesignDictionary;
                                              selector:@selector(dismiss)
                                                object:self];
 
-    [UIView animateWithDuration:kRMessageAnimationDuration animations:^{
-        if (!self.shouldBlurBackground) self.alpha = 0.f;
-        self.topToVCLayoutConstraint.constant = self.topToVCStartConstant;
-        [self.superview layoutIfNeeded];
-    } completion:^(BOOL finished) {
-        [self removeFromSuperview];
-        if ([self.delegate respondsToSelector:@selector(messageViewDidDismiss:)]) {
-            [self.delegate messageViewDidDismiss:self];
+    if ( self.messageType == RMessageTypeWarning )
+    {
+        [UIView animateWithDuration:kRMessageAnimationDuration animations:^
+         {
+             if (!self.shouldBlurBackground)
+                 self.alpha = 0.f;
+         }
+         completion:^(BOOL finished)
+         {
+             self.topToVCLayoutConstraint.constant = self.topToVCStartConstant;
+             [self.superview layoutIfNeeded];
+             
+             [self removeFromSuperview];
+             if ([self.delegate respondsToSelector:@selector(messageViewDidDismiss:)])
+             {
+                 [self.delegate messageViewDidDismiss:self];
+             }
+             if (completionBlock) completionBlock();
+         }];
+    }
+    else
+    {
+        [UIView animateWithDuration:kRMessageAnimationDuration animations:^
+        {
+            if (!self.shouldBlurBackground) self.alpha = 0.f;
+            self.topToVCLayoutConstraint.constant = self.topToVCStartConstant;
+            [self.superview layoutIfNeeded];
         }
-        if (completionBlock) completionBlock();
-    }];
+        completion:^(BOOL finished)
+        {
+            [self removeFromSuperview];
+            if ([self.delegate respondsToSelector:@selector(messageViewDidDismiss:)])
+            {
+                [self.delegate messageViewDidDismiss:self];
+            }
+            if (completionBlock) completionBlock();
+        }];
+    }
 }
 
 #pragma mark - Misc methods

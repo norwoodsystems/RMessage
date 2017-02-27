@@ -4,7 +4,8 @@
         "backgroundColorAlpha": 1.0,
         "titleTextColor": "#FFFFFF",
         "titleFontSize": 17,
-        "subTitleFontSize": 15,
+        "subTitleFontSize": 16.5,
+        "subTitleFontName": "System",
         "subTitleTextColor": "#FFFFFF",
         "iconImage": "NotificationBackgroundSuccessIcon.png",
         "blurBackground": 0
@@ -19,13 +20,17 @@
         "blurBackground": 0
     },
     "warning": {
-        "backgroundColor": "#FFCC00",
-        "backgroundColorAlpha": 1.0,
-        "titleTextColor": "#484638",
+        "backgroundColor": "#7F7F7F",
+        "backgroundColorAlpha": 0.9,
+        "titleTextColor": "#FFFFFF",
         "titleFontSize": 17,
-        "subTitleFontSize": 15,
-        "subTitleTextColor": "#484638",
-        "iconImage": "NotificationBackgroundWarningIcon.png",
+        "subTitleFontSize": 16.5,
+        "subTitleFontName": "System",
+        "subtitleShadowColor": "#7F7F7F",
+        "subTitleShadowOffsetX": 1,
+        "subTitleShadowOffsetY": 1,
+        "subTitleTextColor": "#FFFFFF",
+        "iconImage": "NotificationBackgroundSuccessIcon.png",
         "blurBackground": 0
     },
     "error": {
@@ -33,9 +38,10 @@
         "backgroundColorAlpha": 1.0,
         "titleTextColor": "#FFFFFF",
         "titleFontSize": 17,
-        "subTitleFontSize": 15,
+        "subTitleFontSize": 16.5,
+        "subTitleFontName": "System",
         "subTitleTextColor": "#FFFFFF",
-        "iconImage": "NotificationBackgroundErrorIcon.png",
+        "iconImage": "NotificationBackgroundSuccessIcon.png",
         "blurBackground": 0
     }
 }
