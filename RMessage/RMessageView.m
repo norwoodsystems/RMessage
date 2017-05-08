@@ -13,9 +13,9 @@
 static NSString *const RDesignFileName = @"RMessageDefaultDesign";
 
 /** animation constants */
-static double const kRMessageAnimationDuration = 0.3f;
-static double const kRMessageDisplayTime = 0.75f;
-static double const kRMessageExtraDisplayTimePerPixel = 0.004f;
+static double const kRMessageAnimationDuration = 0.2f;
+static double const kRMessageDisplayTime = 0.5f;
+static double const kRMessageExtraDisplayTimePerPixel = 0.003f;
 
 /** Contains the global design dictionary specified in the entire design RDesignFile */
 static NSMutableDictionary *globalDesignDictionary;
@@ -799,7 +799,7 @@ static NSMutableDictionary *globalDesignDictionary;
         self.topToVCLayoutConstraint.constant = self.topToVCFinalConstant;
         [self.superview layoutIfNeeded];
         
-        [UIView animateWithDuration:kRMessageAnimationDuration + 0.2f animations:^
+        [UIView animateWithDuration:kRMessageAnimationDuration animations:^
         {
             if (!self.shouldBlurBackground)
                 self.alpha = self.messageOpacity;
@@ -815,7 +815,7 @@ static NSMutableDictionary *globalDesignDictionary;
     }
     else
     {
-        [UIView animateWithDuration:kRMessageAnimationDuration + 0.2f
+        [UIView animateWithDuration:kRMessageAnimationDuration
                               delay:0.f
              usingSpringWithDamping:0.7
               initialSpringVelocity:0.f
