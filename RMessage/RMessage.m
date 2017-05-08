@@ -243,11 +243,17 @@ static UIViewController *_defaultViewController;
 
 + (BOOL)dismissActiveNotificationWithCompletion:(void (^)(void))completionBlock
 {
-    if ([RMessage sharedMessage].messages.count == 0 || ![RMessage sharedMessage].messages) return NO;
-
-    dispatch_async(dispatch_get_main_queue(), ^{
+    if ( [RMessage sharedMessage].messages == nil )
+        return NO;
+    
+    if ( [RMessage sharedMessage].messages.count == 0  )
+        return NO;
+    
+    dispatch_async(dispatch_get_main_queue(), ^
+    {
         RMessageView *currentMessage = [RMessage sharedMessage].messages[0];
-        if (currentMessage && currentMessage.messageIsFullyDisplayed) {
+        if (currentMessage && currentMessage.messageIsFullyDisplayed)
+        {
             [[RMessage sharedMessage] dismissMessageView:currentMessage completion:completionBlock];
         }
     });
